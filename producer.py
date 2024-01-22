@@ -6,6 +6,15 @@ import json
 conf = {'bootstrap.servers': 'localhost:9092',
             'client.id': socket.gethostname()}
 
+def currency_rate_poller(currency):
+    conn = http.client.HTTPSConnection("api.coincap.io")
+    payload = ''
+    headers = {}
+    conn.request("GET", "/v2/rates/" + currency, payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    return json.loads(data)["data"]["rateUsd"]
+
 
 def currency_rank_poller(currency):
     conn = http.client.HTTPSConnection("api.coincap.io")
